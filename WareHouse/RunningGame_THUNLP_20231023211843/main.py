@@ -31,7 +31,7 @@ def draw_block():
 def draw_obstacle():
     pygame.draw.rect(screen, BLACK, (obstacle_x, obstacle_y, obstacle_width, obstacle_height))
 def update_score():
-    score_text = font.render("Score: " + str(score), True, BLACK)
+    score_text = font.render(f"Score: {str(score)}", True, BLACK)
     screen.blit(score_text, (10, 10))
 def check_collision():
     if block_y + block_size >= obstacle_y and block_y <= obstacle_y + obstacle_height:

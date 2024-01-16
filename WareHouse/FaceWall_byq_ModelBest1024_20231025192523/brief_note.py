@@ -28,8 +28,7 @@ class BriefNote(tk.Frame):
     def save_note(self):
         note = self.note_text.get(1.0, tk.END)
         if note.strip():
-            file_name = self.get_user_file_name() 
-            if file_name:
+            if file_name := self.get_user_file_name():
                 file_path = os.path.join(os.path.dirname(__file__), file_name)
                 with open(file_path, "w") as file:
                     file.write(note)
@@ -38,8 +37,7 @@ class BriefNote(tk.Frame):
                 print("Note saved as:", file_name)
 
     def open_note(self):
-        selected_file = self.file_listbox.curselection()
-        if selected_file:
+        if selected_file := self.file_listbox.curselection():
             file_name = self.file_listbox.get(selected_file)
             file_path = os.path.join(os.path.dirname(__file__), file_name)
             with open(file_path, "r") as file:
@@ -48,19 +46,23 @@ class BriefNote(tk.Frame):
                 self.note_text.insert(tk.END, note)
 
     def load_saved_files(self):
-        file_names = [f for f in os.listdir(os.path.dirname(__file__)) if f.endswith(".txt") and (f != "meta.txt" and f != "requirements.txt")]
+        file_names = [
+            f
+            for f in os.listdir(os.path.dirname(__file__))
+            if f.endswith(".txt") and f not in ["meta.txt", "requirements.txt"]
+        ]
         self.file_listbox.delete(0, tk.END)
         for file_name in file_names:
             self.file_listbox.insert(tk.END, file_name)
 
     def get_user_file_name(self):
-        user_file_name = tk.simpledialog.askstring("File Name", "Enter a file name (e.g., my_note):")
-        if user_file_name:
-            return user_file_name + '.txt'
+        if user_file_name := tk.simpledialog.askstring(
+            "File Name", "Enter a file name (e.g., my_note):"
+        ):
+            return f'{user_file_name}.txt'
 
     def delete_note(self):
-        selected_file = self.file_listbox.curselection()
-        if selected_file:
+        if selected_file := self.file_listbox.curselection():
             file_name = self.file_listbox.get(selected_file)
             file_path = os.path.join(os.path.dirname(__file__), file_name)
             os.remove(file_path)  # 删除文件

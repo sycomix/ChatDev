@@ -16,9 +16,7 @@ class Player:
         if keys[pygame.K_RIGHT]:
             self.x += self.speed
         # Keep the player within the screen bounds
-        if self.x < 0:
-            self.x = 0
-        if self.x > 800 - self.width:
-            self.x = 800 - self.width
+        self.x = max(self.x, 0)
+        self.x = min(self.x, 800 - self.width)
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 255, 255), (self.x, self.y, self.width, self.height))

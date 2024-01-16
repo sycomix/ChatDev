@@ -1,6 +1,7 @@
 '''
 This is the main file of the 2D horizontal shooting RPG game.
 '''
+
 import pygame
 from player import Player
 from enemy import Enemy
@@ -16,7 +17,7 @@ pygame.display.set_caption("2D Shooting RPG Game")
 player = Player(window_width // 2, window_height - 50)
 # Create enemy objects
 enemies = []
-for i in range(5):
+for _ in range(5):
     enemy = Enemy()
     enemies.append(enemy)
 # Create projectile objects

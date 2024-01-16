@@ -42,10 +42,7 @@ class Snake:
     def check_collision(self):
         if self.x < 0 or self.x >= window_width or self.y < 0 or self.y >= window_height:
             return True
-        for part in self.body[1:]:
-            if self.x == part[0] and self.y == part[1]:
-                return True
-        return False
+        return any(self.x == part[0] and self.y == part[1] for part in self.body[1:])
 # Define the Food class
 class Food:
     def __init__(self):

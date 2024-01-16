@@ -51,8 +51,10 @@ class BusinessCardGenerator:
         slogan_font = ImageFont.truetype("/Library/Fonts/Arial Unicode.ttf", 12)
         slogan_width, slogan_height = draw.textsize(slogan, font=slogan_font)
         draw.text((400 - slogan_width, 280 - slogan_height), slogan, font=slogan_font, fill="black")
-        file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG Image", "*.png"), ("JPEG Image", "*.jpg")])
-        if file_path:
+        if file_path := filedialog.asksaveasfilename(
+            defaultextension=".png",
+            filetypes=[("PNG Image", "*.png"), ("JPEG Image", "*.jpg")],
+        ):
             image.save(file_path)
             print("Business card saved successfully!")
         else:

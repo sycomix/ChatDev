@@ -75,10 +75,9 @@ class Tetris:
             if not self.board.is_valid_move(self.current_shape):
                 self.current_shape.rotate_back()
     def clear_lines(self):
-        lines_to_clear = []
-        for row in range(len(self.board.grid)):
-            if all(self.board.grid[row]):
-                lines_to_clear.append(row)
+        lines_to_clear = [
+            row for row in range(len(self.board.grid)) if all(self.board.grid[row])
+        ]
         for line in lines_to_clear:
             del self.board.grid[line]
             self.board.grid.insert(0, [0] * self.board.cols)

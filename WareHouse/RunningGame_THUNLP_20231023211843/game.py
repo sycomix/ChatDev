@@ -31,7 +31,7 @@ block = pygame.sprite.GroupSingle(Block(block_x, block_y, block_size))
 # Create obstacle sprite group
 obstacles = pygame.sprite.GroupSingle(Obstacle(obstacle_x, obstacle_y, obstacle_width, obstacle_height))
 def update_score():
-    score_text = font.render("Score: " + str(score), True, BLACK)
+    score_text = font.render(f"Score: {str(score)}", True, BLACK)
     screen.blit(score_text, (10, 10))
 # Game loop
 running = True

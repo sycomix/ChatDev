@@ -31,10 +31,7 @@ except ImportError:
 import os
 
 OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
-if 'BASE_URL' in os.environ:
-    BASE_URL = os.environ['BASE_URL']
-else:
-    BASE_URL = None
+BASE_URL = os.environ.get('BASE_URL', None)
 
 
 class ModelBackend(ABC):
@@ -112,7 +109,6 @@ class OpenAIModel(ModelBackend):
                     response.usage.total_tokens, cost))
             if not isinstance(response, ChatCompletion):
                 raise RuntimeError("Unexpected return from OpenAI API")
-            return response
         else:
             num_max_token_map = {
                 "gpt-3.5-turbo": 4096,
@@ -142,7 +138,8 @@ class OpenAIModel(ModelBackend):
                     response["usage"]["total_tokens"], cost))
             if not isinstance(response, Dict):
                 raise RuntimeError("Unexpected return from OpenAI API")
-            return response
+
+        return response
 
 
 class StubModel(ModelBackend):
@@ -193,6 +190,4 @@ class ModelFactory:
         if model_type is None:
             model_type = default_model_type
 
-        # log_visualize("Model Type: {}".format(model_type))
-        inst = model_class(model_type, model_config_dict)
-        return inst
+        return model_class(model_type, model_config_dict)

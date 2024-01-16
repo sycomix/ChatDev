@@ -25,7 +25,9 @@ class CountdownTimer:
                 self.timer_label.config(text="No more breaks scheduled.")
                 return
             current_break = self.schedule[self.current_index].time()
-        remaining_time = datetime.combine(datetime.today(), current_break) - datetime.combine(datetime.today(), now)
+        remaining_time = datetime.combine(
+            datetime.now(), current_break
+        ) - datetime.combine(datetime.now(), now)
 
         # remaining_time =  current_break - now
 

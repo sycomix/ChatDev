@@ -62,39 +62,39 @@ class HumanPlayer(Player):
         prompt = f"Community cards: {self.community_cards}"
         print(prompt)
         decision = input("Enter your decision (fold/check/bet/call/raise): ")
-        if decision == "fold" or decision == "check":
+        if (
+            decision in ["fold", "check"]
+            or decision != "q"
+            and decision == "call"
+            or decision != "q"
+            and decision == "raise"
+        ):
             return decision
         elif decision == "q":
             print("Quitting...")
             sys.exit() #Goodbye mf
-        elif decision == "call":
-            return decision
-        elif decision == "raise":
-            return decision
         else:
             print("Invalid decision. Please enter a valid decision.")
             return self.make_decision(current_bet)
     def get_raise_amount(self, current_bet):
         try:
-                amount = int(input(f"Enter the raise amount: {current_bet*2} + "))
-                return amount
+            return int(input(f"Enter the raise amount: {current_bet*2} + "))
         except ValueError:
             print("Invalid input.")
             return self.get_raise_amount(current_bet)
             
 class AIPlayer(Player):
     def make_decision(self, current_bet):
-        if random.random() < 0.05:  # 5% chance of making a random decision
+        if random.random() < 0.05:
             return random.choice(["fold", "check", "bet", "call", "raise"])
+        if current_bet > self.chips:
+            return random.choice(["call, fold"])
+        elif current_bet == 0:
+            return random.choice(["check", "raise"])
+        elif current_bet > self.previous_bet:
+            return random.choice(["fold", "call", "raise"])
         else:
-            if current_bet > self.chips:
-                return random.choice(["call, fold"])
-            elif current_bet == 0:
-                return random.choice(["check", "raise"])
-            elif current_bet > self.previous_bet:
-                return random.choice(["fold", "call", "raise"])
-            else:
-                return random.choice(["check", "call", "raise"])
+            return random.choice(["check", "call", "raise"])
     def get_raise_amount(self, current_bet):
         therand = random.randint(0, 100)
         print(f"Raise increment: {therand}")

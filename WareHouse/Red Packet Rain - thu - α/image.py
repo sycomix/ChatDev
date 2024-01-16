@@ -34,5 +34,4 @@ class Image:
 def select_file():
     root = tk.Tk()
     root.withdraw()
-    file_path = filedialog.askopenfilename()
-    return file_path
+    return filedialog.askopenfilename()

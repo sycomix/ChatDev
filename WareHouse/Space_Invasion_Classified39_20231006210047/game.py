@@ -40,23 +40,24 @@ class Game:
                     bullet = Bullet(bullet_x, bullet_y)
                     self.bullets.append(bullet)
     def update(self):
-        if not self.paused:
-            for bullet in self.bullets:
-                bullet.update()
+        if self.paused:
+            return
+        for bullet in self.bullets:
+            bullet.update()
+        for enemy in self.enemies:
+            enemy.update()
+        self.player.update()
+        # Check for collisions between bullets and enemies
+        destroyed_enemies = []
+        for bullet in self.bullets:
             for enemy in self.enemies:
-                enemy.update()
-            self.player.update()
-            # Check for collisions between bullets and enemies
-            destroyed_enemies = []
-            for bullet in self.bullets:
-                for enemy in self.enemies:
-                    if bullet.collides_with(enemy):
-                        destroyed_enemies.append(enemy)
-                        self.destroyed_count += 1
-            # Remove destroyed enemies and bullets
-            for enemy in destroyed_enemies:
-                self.enemies.remove(enemy)
-            self.bullets = [bullet for bullet in self.bullets if not bullet.collides_with_any(self.enemies)]
+                if bullet.collides_with(enemy):
+                    destroyed_enemies.append(enemy)
+                    self.destroyed_count += 1
+        # Remove destroyed enemies and bullets
+        for enemy in destroyed_enemies:
+            self.enemies.remove(enemy)
+        self.bullets = [bullet for bullet in self.bullets if not bullet.collides_with_any(self.enemies)]
     def draw(self):
         self.screen.fill((0, 0, 0))
         for bullet in self.bullets:
@@ -68,9 +69,6 @@ class Game:
     def get_destroyed_count(self):
         return self.destroyed_count
     def enemy_reached_bottom(self):
-        for enemy in self.enemies:
-            if enemy.y + enemy.height >= 600:
-                return True
-        return False
+        return any(enemy.y + enemy.height >= 600 for enemy in self.enemies)
     def pause(self):
         self.paused = True

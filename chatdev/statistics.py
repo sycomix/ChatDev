@@ -101,11 +101,12 @@ def get_info(dir, log_filepath):
         # print("code_lines:", code_lines)
 
         lines = open(log_filepath, "r", encoding="utf8").read().split("\n")
-        sublines = [line for line in lines if "| **model_type** |" in line]
-        if len(sublines) > 0:
+        if sublines := [
+            line for line in lines if "| **model_type** |" in line
+        ]:
             model_type = sublines[0].split("| **model_type** | ModelType.")[-1].split(" | ")[0]
             model_type = model_type[:-2]
-            if model_type == "GPT_3_5_TURBO" or model_type == "GPT_3_5_TURBO_NEW":
+            if model_type in ["GPT_3_5_TURBO", "GPT_3_5_TURBO_NEW"]:
                 model_type = "gpt-3.5-turbo"
             elif model_type == "GPT_4":
                 model_type = "gpt-4"
@@ -113,8 +114,6 @@ def get_info(dir, log_filepath):
                 model_type = "gpt-4-32k"
             elif model_type == "GPT_4_TURBO":
                 model_type = "gpt-4-1106-preview"
-            # print("model_type:", model_type)
-
         lines = open(log_filepath, "r", encoding="utf8").read().split("\n")
         start_lines = [line for line in lines if "**[Start Chat]**" in line]
         chat_lines = [line for line in lines if "<->" in line]
@@ -122,34 +121,28 @@ def get_info(dir, log_filepath):
         # print("num_utterance:", num_utterance)
 
         lines = open(log_filepath, "r", encoding="utf8").read().split("\n")
-        sublines = [line for line in lines if line.startswith("prompt_tokens:")]
-        if len(sublines) > 0:
+        if sublines := [
+            line for line in lines if line.startswith("prompt_tokens:")
+        ]:
             nums = [int(line.split(": ")[-1]) for line in sublines]
             num_prompt_tokens = np.sum(nums)
-            # print("num_prompt_tokens:", num_prompt_tokens)
-
         lines = open(log_filepath, "r", encoding="utf8").read().split("\n")
-        sublines = [line for line in lines if line.startswith("completion_tokens:")]
-        if len(sublines) > 0:
+        if sublines := [
+            line for line in lines if line.startswith("completion_tokens:")
+        ]:
             nums = [int(line.split(": ")[-1]) for line in sublines]
             num_completion_tokens = np.sum(nums)
-            # print("num_completion_tokens:", num_completion_tokens)
-
         lines = open(log_filepath, "r", encoding="utf8").read().split("\n")
-        sublines = [line for line in lines if line.startswith("total_tokens:")]
-        if len(sublines) > 0:
+        if sublines := [
+            line for line in lines if line.startswith("total_tokens:")
+        ]:
             nums = [int(line.split(": ")[-1]) for line in sublines]
             num_total_tokens = np.sum(nums)
-            # print("num_total_tokens:", num_total_tokens)
-
         lines = open(log_filepath, "r", encoding="utf8").read().split("\n")
 
         lines = open(log_filepath, "r", encoding="utf8").read().split("\n")
-        num_reflection = 0
-        for line in lines:
-            if "on : Reflection" in line:
-                num_reflection += 1
-        # print("num_reflection:", num_reflection)
+        num_reflection = sum(1 for line in lines if "on : Reflection" in line)
+            # print("num_reflection:", num_reflection)
 
     cost = 0.0
     if num_png_files != -1:
@@ -157,21 +150,18 @@ def get_info(dir, log_filepath):
     if prompt_cost(model_type, num_prompt_tokens, num_completion_tokens) != -1:
         cost += prompt_cost(model_type, num_prompt_tokens, num_completion_tokens)
 
-    # info = f"🕑duration={duration}s 💰cost=${cost} 🔨version_updates={version_updates} 📃num_code_files={num_code_files} 🏞num_png_files={num_png_files} 📚num_doc_files={num_doc_files} 📃code_lines={code_lines} 📋env_lines={env_lines} 📒manual_lines={manual_lines} 🗣num_utterances={num_utterance} 🤔num_self_reflections={num_reflection} ❓num_prompt_tokens={num_prompt_tokens} ❗num_completion_tokens={num_completion_tokens} ⁉️num_total_tokens={num_total_tokens}"
-
-    info = "\n\n💰**cost**=${:.6f}\n\n🔨**version_updates**={}\n\n📃**num_code_files**={}\n\n🏞**num_png_files**={}\n\n📚**num_doc_files**={}\n\n📃**code_lines**={}\n\n📋**env_lines**={}\n\n📒**manual_lines**={}\n\n🗣**num_utterances**={}\n\n🤔**num_self_reflections**={}\n\n❓**num_prompt_tokens**={}\n\n❗**num_completion_tokens**={}\n\n🌟**num_total_tokens**={}" \
-        .format(cost,
-                version_updates,
-                num_code_files,
-                num_png_files,
-                num_doc_files,
-                code_lines,
-                env_lines,
-                manual_lines,
-                num_utterance,
-                num_reflection,
-                num_prompt_tokens,
-                num_completion_tokens,
-                num_total_tokens)
-
-    return info
+    return "\n\n💰**cost**=${:.6f}\n\n🔨**version_updates**={}\n\n📃**num_code_files**={}\n\n🏞**num_png_files**={}\n\n📚**num_doc_files**={}\n\n📃**code_lines**={}\n\n📋**env_lines**={}\n\n📒**manual_lines**={}\n\n🗣**num_utterances**={}\n\n🤔**num_self_reflections**={}\n\n❓**num_prompt_tokens**={}\n\n❗**num_completion_tokens**={}\n\n🌟**num_total_tokens**={}".format(
+        cost,
+        version_updates,
+        num_code_files,
+        num_png_files,
+        num_doc_files,
+        code_lines,
+        env_lines,
+        manual_lines,
+        num_utterance,
+        num_reflection,
+        num_prompt_tokens,
+        num_completion_tokens,
+        num_total_tokens,
+    )

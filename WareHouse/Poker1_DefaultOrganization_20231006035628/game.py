@@ -67,13 +67,13 @@ class Game:
                 player.previous_bet = 0
                 player.blind = 0
                 self.current_bet = 0
-                
+
             else:
                 self.current_bet = 10
-                
+
         if len(self.community_cards) != 0:
             print (f"Community cards: {self.community_cards}")
-         
+
         print (f"Pot: {self.pot}")
         current_player_index = self.get_next_player_index(0)
         last_raiser_index = None
@@ -84,25 +84,23 @@ class Game:
                 if action == "fold":
                     current_player.fold()
                 elif action == "check":
-                    if last_raiser_index is not None:
-                        if (self.current_bet > current_player.previous_bet):
-                            print(f"{current_player.name} attempted to check. Forcing fold...")
-                            current_player.fold() #Bot likes to check to avoid calling, force them to fold with this
-                    else:
+                    if last_raiser_index is None:
                         current_player.check()
+                    elif (self.current_bet > current_player.previous_bet):
+                        print(f"{current_player.name} attempted to check. Forcing fold...")
+                        current_player.fold() #Bot likes to check to avoid calling, force them to fold with this
                 elif action == "call":
-                    if last_raiser_index is not None: #Someone raised
-                        if (amount >= current_player.chips): #All in
-                            self.pot += current_player.all_in()
-                        else: #Has the chips to call
-                            prev_bet = current_player.call(self.current_bet - current_player.previous_bet - current_player.blind)
-                            self.pot += prev_bet                           
-                            current_player.previous_bet += prev_bet + current_player.blind
-                            current_player.blind = 0
-                    else: #No one raised, pay big blind
+                    if last_raiser_index is None: #No one raised, pay big blind
                         self.pot += current_player.call(self.big_blind - current_player.blind)
                         self.previous_bet = 10
                         current_player.previous_bet = 10
+                        current_player.blind = 0
+                    elif (amount >= current_player.chips): #All in
+                        self.pot += current_player.all_in()
+                    else: #Has the chips to call
+                        prev_bet = current_player.call(self.current_bet - current_player.previous_bet - current_player.blind)
+                        self.pot += prev_bet                           
+                        current_player.previous_bet += prev_bet + current_player.blind
                         current_player.blind = 0
                 elif action == "raise":             
                     amount = current_player.get_raise_amount(self.current_bet)                   
@@ -159,7 +157,7 @@ class Game:
     def determine_hand_type(self, hand):
         # Sort the hand in descending order based on card values
         sorted_hand = sorted(hand, key=lambda card: self.get_card_value(card), reverse=True)
-        
+
         # Check for specific hand types in decreasing order of rank
         if self.is_royal_flush(sorted_hand):
             return 9  # Royal flush
@@ -177,10 +175,7 @@ class Game:
             return 3  # Three of a kind
         if self.is_two_pair(sorted_hand):
             return 2  # Two pair
-        if self.is_pair(sorted_hand):
-            return 1  # Pair
-
-        return 0  # High card
+        return 1 if self.is_pair(sorted_hand) else 0
 
     def get_card_value(self, card):
         # Map card ranks (2, 3, 4, etc.) to their corresponding values (0 to 12)

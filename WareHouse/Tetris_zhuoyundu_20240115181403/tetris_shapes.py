@@ -27,12 +27,12 @@ class ShapeI(Shape):
         self.x = 3
         self.y = 0
     def get_coordinates(self):
-        if self.rotation == 0 or self.rotation == 2:
+        if self.rotation in [0, 2]:
             return [(self.x, self.y), (self.x, self.y + 1), (self.x, self.y + 2), (self.x, self.y + 3)]
         else:
             return [(self.x, self.y), (self.x + 1, self.y), (self.x + 2, self.y), (self.x + 3, self.y)]
     def get_bounding_box(self):
-        if self.rotation == 0 or self.rotation == 2:
+        if self.rotation in [0, 2]:
             return (self.x, self.y, self.x, self.y + 3)
         else:
             return (self.x, self.y, self.x + 3, self.y)
@@ -51,12 +51,10 @@ class ShapeJ(Shape):
         else:
             return [(self.x, self.y + 1), (self.x + 1, self.y + 1), (self.x + 2, self.y + 1), (self.x + 2, self.y)]
     def get_bounding_box(self):
-        if self.rotation == 0:
+        if self.rotation in [0, 2]:
             return (self.x, self.y, self.x + 1, self.y + 2)
         elif self.rotation == 1:
             return (self.x, self.y, self.x + 2, self.y + 1)
-        elif self.rotation == 2:
-            return (self.x, self.y, self.x + 1, self.y + 2)
         else:
             return (self.x, self.y + 1, self.x + 2, self.y)
 class ShapeL(Shape):
@@ -76,8 +74,6 @@ class ShapeL(Shape):
     def get_bounding_box(self):
         if self.rotation == 0:
             return (self.x, self.y + 1, self.x + 2, self.y + 2)
-        elif self.rotation == 1:
-            return (self.x, self.y, self.x + 2, self.y + 1)
         elif self.rotation == 2:
             return (self.x, self.y, self.x + 1, self.y + 2)
         else:
@@ -97,12 +93,12 @@ class ShapeS(Shape):
         self.x = 3
         self.y = 0
     def get_coordinates(self):
-        if self.rotation == 0 or self.rotation == 2:
+        if self.rotation in [0, 2]:
             return [(self.x + 1, self.y), (self.x + 2, self.y), (self.x, self.y + 1), (self.x + 1, self.y + 1)]
         else:
             return [(self.x, self.y), (self.x, self.y + 1), (self.x + 1, self.y + 1), (self.x + 1, self.y + 2)]
     def get_bounding_box(self):
-        if self.rotation == 0 or self.rotation == 2:
+        if self.rotation in [0, 2]:
             return (self.x, self.y, self.x + 2, self.y + 1)
         else:
             return (self.x, self.y, self.x + 1, self.y + 2)
@@ -123,8 +119,6 @@ class ShapeT(Shape):
     def get_bounding_box(self):
         if self.rotation == 0:
             return (self.x, self.y, self.x + 2, self.y)
-        elif self.rotation == 1:
-            return (self.x, self.y, self.x + 1, self.y + 2)
         elif self.rotation == 2:
             return (self.x, self.y + 1, self.x + 2, self.y + 1)
         else:
@@ -135,12 +129,12 @@ class ShapeZ(Shape):
         self.x = 3
         self.y = 0
     def get_coordinates(self):
-        if self.rotation == 0 or self.rotation == 2:
+        if self.rotation in [0, 2]:
             return [(self.x, self.y), (self.x + 1, self.y), (self.x + 1, self.y + 1), (self.x + 2, self.y + 1)]
         else:
             return [(self.x + 1, self.y), (self.x, self.y + 1), (self.x + 1, self.y + 1), (self.x, self.y + 2)]
     def get_bounding_box(self):
-        if self.rotation == 0 or self.rotation == 2:
+        if self.rotation in [0, 2]:
             return (self.x, self.y, self.x + 2, self.y + 1)
         else:
             return (self.x, self.y, self.x + 1, self.y + 2)

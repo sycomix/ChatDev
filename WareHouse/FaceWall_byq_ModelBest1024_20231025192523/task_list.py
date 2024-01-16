@@ -20,27 +20,22 @@ class TaskList(tk.Frame):
         self.complete_button = tk.Button(self, text="Mark as Completed", command=self.mark_completed)
         self.complete_button.pack()
     def add_task(self):
-        task = self.task_entry.get()
-        if task:
+        if task := self.task_entry.get():
             self.tasks.append(task)
             self.task_listbox.insert(tk.END, task)
             self.task_entry.delete(0, tk.END)
     def edit_task(self):
-        selected_task = self.task_listbox.curselection()
-        if selected_task:
-            task = self.task_entry.get()
-            if task:
+        if selected_task := self.task_listbox.curselection():
+            if task := self.task_entry.get():
                 self.tasks[selected_task[0]] = task
                 self.task_listbox.delete(selected_task)
                 self.task_listbox.insert(selected_task, task)
                 self.task_entry.delete(0, tk.END)
     def delete_task(self):
-        selected_task = self.task_listbox.curselection()
-        if selected_task:
+        if selected_task := self.task_listbox.curselection():
             index = selected_task[0]
             self.tasks.pop(index)
             self.task_listbox.delete(selected_task)
     def mark_completed(self):
-        selected_task = self.task_listbox.curselection()
-        if selected_task:
+        if selected_task := self.task_listbox.curselection():
             self.task_listbox.itemconfig(selected_task, fg="gray")
