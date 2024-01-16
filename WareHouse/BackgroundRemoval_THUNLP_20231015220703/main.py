@@ -21,8 +21,9 @@ class Application(tk.Tk):
         self.image = None
         self.processed_image = None
     def upload_image(self):
-        file_path = filedialog.askopenfilename(filetypes=[("Image Files", "*.png *.jpg *.jpeg")])
-        if file_path:
+        if file_path := filedialog.askopenfilename(
+            filetypes=[("Image Files", "*.png *.jpg *.jpeg")]
+        ):
             self.image = Image.open(file_path)
             self.processed_image = self.image.copy()
             self.display_image(self.image)
@@ -32,8 +33,10 @@ class Application(tk.Tk):
             self.display_image(self.processed_image)
     def save_image(self):
         if self.processed_image:
-            file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG Files", "*.png"), ("JPEG Files", "*.jpg *.jpeg")])
-            if file_path:
+            if file_path := filedialog.asksaveasfilename(
+                defaultextension=".png",
+                filetypes=[("PNG Files", "*.png"), ("JPEG Files", "*.jpg *.jpeg")],
+            ):
                 self.processed_image.save(file_path)
     def display_image(self, image):
         image.thumbnail((400, 400))

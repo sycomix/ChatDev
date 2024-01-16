@@ -20,20 +20,21 @@ class MazeGameApp(tk.Tk):
                 if self.maze.maze[row][col] == 1:
                     self.canvas.create_rectangle(col*40, row*40, (col+1)*40, (row+1)*40, fill="black")
     def move_player(self, event):
-        if not self.game_over:
-            if event.keysym == "Up":
-                self.maze.move_player("up")
-            elif event.keysym == "Down":
-                self.maze.move_player("down")
-            elif event.keysym == "Left":
-                self.maze.move_player("left")
-            elif event.keysym == "Right":
-                self.maze.move_player("right")
-            self.canvas.delete("player")
-            self.canvas.create_oval(self.maze.player_col*40, self.maze.player_row*40, (self.maze.player_col+1)*40, (self.maze.player_row+1)*40, fill="red", tags="player")
-            if self.maze.player_row == self.maze.goal_row and self.maze.player_col == self.maze.goal_col:
-                self.canvas.create_text(200, 200, text="Congratulations! You have reached the goal!", font=("Arial", 16), fill="white")
-                self.game_over = True
+        if self.game_over:
+            return
+        if event.keysym == "Up":
+            self.maze.move_player("up")
+        elif event.keysym == "Down":
+            self.maze.move_player("down")
+        elif event.keysym == "Left":
+            self.maze.move_player("left")
+        elif event.keysym == "Right":
+            self.maze.move_player("right")
+        self.canvas.delete("player")
+        self.canvas.create_oval(self.maze.player_col*40, self.maze.player_row*40, (self.maze.player_col+1)*40, (self.maze.player_row+1)*40, fill="red", tags="player")
+        if self.maze.player_row == self.maze.goal_row and self.maze.player_col == self.maze.goal_col:
+            self.canvas.create_text(200, 200, text="Congratulations! You have reached the goal!", font=("Arial", 16), fill="white")
+            self.game_over = True
 if __name__ == "__main__":
     app = MazeGameApp()
     app.mainloop()

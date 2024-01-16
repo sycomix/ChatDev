@@ -13,5 +13,4 @@ class ImageFinder:
         url = f"https://www.google.com/search?q={query}&tbm=isch"
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
-        image_url = soup.find('img')['src']
-        return image_url
+        return soup.find('img')['src']

@@ -18,7 +18,4 @@ class Bullet:
             pygame.Rect(enemy.x, enemy.y, enemy.width, enemy.height)
         )
     def collides_with_any(self, enemies):
-        for enemy in enemies:
-            if self.collides_with(enemy):
-                return True
-        return False
+        return any(self.collides_with(enemy) for enemy in enemies)

@@ -20,11 +20,13 @@ def menu():
     while running:
         # Handle events
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if (
+                event.type != pygame.QUIT
+                and event.type == pygame.KEYDOWN
+                and event.key == pygame.K_RETURN
+                or event.type == pygame.QUIT
+            ):
                 running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    running = False
         # Clear the window
         window.fill(BLACK)
         # Draw the menu text

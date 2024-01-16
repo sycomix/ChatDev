@@ -29,8 +29,8 @@ def log_visualize(role, content=None):
         send_msg("System", role)
         print(role + "\n")
     else:
-        print(str(role) + ": " + str(content) + "\n")
-        logging.info(str(role) + ": " + str(content) + "\n")
+        print(f"{str(role)}: {str(content)}" + "\n")
+        logging.info(f"{str(role)}: {str(content)}" + "\n")
         if isinstance(content, SystemMessage):
             records_kv = []
             content.meta_dict["content"] = content.content
@@ -52,10 +52,7 @@ def convert_to_markdown_table(records_kv):
     # Create the Markdown table rows
     rows = [f"| **{key}** | {value} |" for (key, value) in records_kv]
 
-    # Combine the header and rows to form the final Markdown table
-    markdown_table = header + "\n" + '\n'.join(rows)
-
-    return markdown_table
+    return header + "\n" + '\n'.join(rows)
 
 
 def log_arguments(func):
@@ -64,7 +61,7 @@ def log_arguments(func):
         params = sig.parameters
 
         all_args = {}
-        all_args.update({name: value for name, value in zip(params.keys(), args)})
+        all_args.update(dict(zip(params.keys(), args)))
         all_args.update(kwargs)
 
         records_kv = []
@@ -73,7 +70,7 @@ def log_arguments(func):
                 continue
             value = escape_string(value)
             records_kv.append([name, value])
-        records = f"**[{func.__name__}]**\n\n" + convert_to_markdown_table(records_kv)
+        records = f"**[{func.__name__}]**\n\n{convert_to_markdown_table(records_kv)}"
         log_visualize("System", records)
 
         return func(*args, **kwargs)

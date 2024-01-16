@@ -7,9 +7,7 @@ import os
 import time
 
 self_api_key = os.environ.get('OPENAI_API_KEY')
-BASE_URL = os.environ.get('BASE_URL')
-
-if BASE_URL:
+if BASE_URL := os.environ.get('BASE_URL'):
     client = openai.OpenAI(
         api_key=self_api_key,
         base_url=BASE_URL,
@@ -27,12 +25,7 @@ def get_baidu_baike_content(keyword):
 
     # Beautiful Soup part for the html content
     soup = BeautifulSoup(response.content, 'html.parser')
-    # find the main content in the page
-    # main_content = soup.find('div', class_='lemma-summary')
-    main_content = soup.contents[-1].contents[0].contents[4].attrs['content']
-    # find the target content
-    # content_text = main_content.get_text().strip()
-    return main_content
+    return soup.contents[-1].contents[0].contents[4].attrs['content']
 
 
 def get_wiki_content(keyword):
@@ -54,8 +47,7 @@ def get_wiki_content(keyword):
 
 def modal_trans(task_dsp):
     try:
-        task_in ="'" + task_dsp + \
-               "'Just give me the most important keyword about this sentence without explaining it and your answer should be only one keyword."
+        task_in = f"'{task_dsp}'Just give me the most important keyword about this sentence without explaining it and your answer should be only one keyword."
         messages = [{"role": "user", "content": task_in}]
         response = client.chat.completions.create(messages=messages,
         model="gpt-3.5-turbo-16k",
@@ -69,8 +61,7 @@ def modal_trans(task_dsp):
         response_text = response.choices[0].message.content
         spider_content = get_wiki_content(response_text)
         # time.sleep(1)
-        task_in = "'" + spider_content + \
-               "',Summarize this paragraph and return the key information."
+        task_in = f"'{spider_content}',Summarize this paragraph and return the key information."
         messages = [{"role": "user", "content": task_in}]
         response = client.chat.completions.create(messages=messages,
         model="gpt-3.5-turbo-16k",

@@ -16,7 +16,7 @@ def process_file(filename):
         if line.strip() and not line.strip().startswith("#"):
             # Check if there is already a comment on the line
             if "#" not in line:
-                line = line.rstrip() + "  # " + generate_praise(line) + "\n"
+                line = f"{line.rstrip()}  # {generate_praise(line)}" + "\n"
         new_lines.append(line)
     try:
         with open("praised_" + filename.split('/')[-1], "w", encoding="utf8") as file:

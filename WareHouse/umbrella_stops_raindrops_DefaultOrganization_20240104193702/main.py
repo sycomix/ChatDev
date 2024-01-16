@@ -27,9 +27,7 @@ class MainApp:
             return False
         x1, y1, x2, y2 = coords1
         x3, y3, x4, y4 = coords2
-        if x3 < x2 and x4 > x1 and y3 < y2 and y4 > y1:
-            return True
-        return False
+        return x3 < x2 and x4 > x1 and y3 < y2 and y4 > y1
     def create_raindrop(self):
         x = random.randint(0, self.canvas.winfo_width())  # Random x position
         raindrop = Raindrop(self.canvas, x)

@@ -10,30 +10,23 @@ class ProjectEvaluator:
         # Extract relevant information from the README.md file
         project_name = self.extract_project_name(readme_content)
         project_description = self.extract_project_description(readme_content)
-        # Add more evaluation criteria as needed
-        # Calculate the score based on the extracted information
-        score = self.calculate_score(project_name, project_description)
-        return score
+        return self.calculate_score(project_name, project_description)
     def read_file(self, file_path):
         with open(file_path, "r") as file:
             content = file.read()
         return content
     def extract_project_name(self, readme_content):
-        # Extract project name from the README.md file
-        # Implement your logic here
-        project_name = ""
-        match = re.search(r"#\s*(.*)", readme_content)
-        if match:
-            project_name = match.group(1)
-        return project_name
+        return (
+            match.group(1)
+            if (match := re.search(r"#\s*(.*)", readme_content))
+            else ""
+        )
     def extract_project_description(self, readme_content):
-        # Extract project description from the README.md file
-        # Implement your logic here
-        project_description = ""
-        match = re.search(r"##\s*Description\n\n(.*)", readme_content)
-        if match:
-            project_description = match.group(1)
-        return project_description
+        return (
+            match.group(1)
+            if (match := re.search(r"##\s*Description\n\n(.*)", readme_content))
+            else ""
+        )
     def calculate_score(self, project_name, project_description):
         # Calculate the score based on the project name and description
         # Implement your logic here
@@ -51,9 +44,8 @@ class ProjectEvaluator:
                 )
                 print("response got", i)
                 content = resp.choices[0]["message"]["content"]
-                json_str = re.search(r'\{.+\}', content, re.S).group(0) 
-                scores_dict = json.loads(json_str)
-                return scores_dict
+                json_str = re.search(r'\{.+\}', content, re.S).group(0)
+                return json.loads(json_str)
             except Exception as e:
                 print(e)
                 print(resp)

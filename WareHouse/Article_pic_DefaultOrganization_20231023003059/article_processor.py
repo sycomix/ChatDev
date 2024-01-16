@@ -12,5 +12,4 @@ class ArticleProcessor:
         image_url = finder.find_image()
         # Create the markdown
         maker = MarkdownMaker(self.article, image_url)
-        markdown = maker.create_markdown()
-        return markdown
+        return maker.create_markdown()
